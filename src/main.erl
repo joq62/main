@@ -195,8 +195,10 @@ handle_info({nodedown,Node}, State) ->
 
 
 handle_info(timeout, State) ->
+    Pong=[{N,net_adm:ping(N)}||N<-?ConnectNodes],
+    io:format("Pong  ~p~n",[{Pong,?MODULE,?LINE}]),
     ok=initial_trade_resources(),
-    spawn(fun()->lib_main:connect() end),
+    spawn(fun()->lib_main:connect(?Sleep) end),
     
     {noreply, State};
 
