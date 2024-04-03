@@ -17,7 +17,7 @@
 -include("log.api").
 
 -include("main.hrl").
--include("main.resource_discovery").
+-include("main.rd").
 
 
 
@@ -122,8 +122,8 @@ stop()-> gen_server:stop(?SERVER).
 	  ignore.
 
 init([]) ->
- 
-    ?LOG_NOTICE("Server started ",[?MODULE]),
+
+     
     {ok, #state{
 	   
 	    
@@ -195,11 +195,26 @@ handle_info({nodedown,Node}, State) ->
 
 
 handle_info(timeout, State) ->
+    {ok,_}=log:start_link(),
+    %file:del_dir_r(?MainLogDir),
+    file:make_dir(?MainLogDir),
+    [NodeName,_HostName]=string:tokens(atom_to_list(node()),"@"),
+    NodeNodeLogDir=filename:join(?MainLogDir,NodeName),
+    ok=log:create_logger(NodeNodeLogDir,?LocalLogDir,?LogFile,?MaxNumFiles,?MaxNumBytes),
+    {ok,_}=rd:start_link(),
+    
     Pong=[{N,net_adm:ping(N)}||N<-?ConnectNodes],
-    io:format("Pong  ~p~n",[{Pong,?MODULE,?LINE}]),
+    ?LOG_NOTICE("Connect result ",[Pong,?MODULE]),
+ 
+    {ok,_}=git_handler:start_link(),
+    {ok,_}=catalog:start_link(),
+    {ok,_}=deployment:start_link(),
+    {ok,_}=controller:start_link(),
+    
     ok=initial_trade_resources(),
     spawn(fun()->lib_main:connect(?Sleep) end),
-    
+    ?LOG_NOTICE("Server started ",[?MODULE]),
+  
     {noreply, State};
 
 

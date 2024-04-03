@@ -30,20 +30,9 @@ init([]) ->
                  intensity => 0,
                  period => 1},
     ChildSpecs = [
-		  #{id => log,               
-		    start => {log,start_link,[]}},
-		  #{id => rd,               
-		    start => {rd,start_link,[]}},
-		  #{id => git_handler,               
-		    start => {git_handler,start_link,[]}},
-		  #{id => deployment,               
-		    start => {deployment,start_link,[]}},
-		  #{id => catalog,               
-		    start => {catalog,start_link,[]}},
-		  #{id => controller,               
-		    start => {controller,start_link,[]}},
+		  
 		  #{id => main,               
-		    start => {main,start_link,[]}}
+		    start => {main,start_link,[]}}	 
 		 ],
     {ok, {SupFlags, ChildSpecs}}.
 
