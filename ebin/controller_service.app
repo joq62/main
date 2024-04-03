@@ -1,0 +1,11 @@
+{application,controller_service,
+             [{description,"An OTP application"},
+              {vsn,"0.1.0"},
+              {registered,[]},
+              {mod,{controller_service_app,[]}},
+              {applications,[kernel,stdlib]},
+              {env,[]},
+              {modules,[controller,lib_controller,lib_reconciliate,
+                        lib_worker_controller]},
+              {licenses,["Apache-2.0"]},
+              {links,[]}]}.
