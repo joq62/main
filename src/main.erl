@@ -25,12 +25,7 @@
 
 %% API
 -export([
-	 reconciliate/0,
-	 load_start/1,
-	 stop_unload/1,
-	 
-	 add_application/1,
-	 delete_application/1
+	connect/0
 	]).
 
 %% OaM 
@@ -70,53 +65,10 @@
 %% 
 %% @end
 %%--------------------------------------------------------------------
--spec reconciliate() -> 
+-spec connect() -> 
 	  ok .
-reconciliate() ->
-    gen_server:cast(?SERVER,{reconciliate}).
-
-%%--------------------------------------------------------------------
-%% @doc
-%% Add application with ApplicationId to be deployed 
-%% 
-%% @end
-%%--------------------------------------------------------------------
--spec load_start(ApplicationFileName::string()) -> 
-	  {ok,Map::map()} | {error, Error :: term()}.
-load_start(ApplicationFileName) ->
-    gen_server:call(?SERVER,{load_start,ApplicationFileName},infinity).
-%%--------------------------------------------------------------------
-%% @doc
-%% Add application with ApplicationId to be deployed 
-%% 
-%% @end
-%%--------------------------------------------------------------------
--spec stop_unload(ApplicationFileName::string()) -> 
-	  ok | {error, Error :: term()}.
-stop_unload(ApplicationFileName) ->
-    gen_server:call(?SERVER,{stop_unload,ApplicationFileName},infinity).
-
-%%--------------------------------------------------------------------
-%% @doc
-%% Add application with ApplicationId to be deployed 
-%% 
-%% @end
-%%--------------------------------------------------------------------
--spec add_application(ApplicationId::string()) -> 
-	  ok | {error, Error :: term()}.
-add_application(ApplicationId) ->
-    gen_server:call(?SERVER,{add_application,ApplicationId},infinity).
-%%--------------------------------------------------------------------
-%% @doc
-%% Delete application ApplicationId from the deployment list 
-%% 
-%% @end
-%%--------------------------------------------------------------------
--spec delete_application(ApplicationId::string()) -> 
-	  ok | {error, Error :: term()}.
-delete_application(ApplicationId) ->
-    gen_server:call(?SERVER,{delete_application,ApplicationId},infinity).
-
+connect() ->
+    gen_server:cast(?SERVER,{connect}).
 
 %%--------------------------------------------------------------------
 %% @doc
@@ -194,49 +146,6 @@ init([]) ->
 	  {stop, Reason :: term(), NewState :: term()}.
 
 
-handle_call({load_start,ApplicationFileName}, _From, State) ->
-  %  io:format(" ~p~n",[{?FUNCTION_NAME,?MODULE,?LINE}]),
-    Result=try lib_controller:load_start(ApplicationFileName) of
-	       {ok,R}->
-		   {ok,R};
-	       {error,Reason}->
-		   {error,Reason}
-	   catch
-	       Event:Reason:Stacktrace ->
-		   {Event,Reason,Stacktrace,?MODULE,?LINE}
-	   end,
-    Reply=case Result of
-	      {ok,DeploymentInfo}->
-		   {ok,DeploymentInfo};
-	      ErrorEvent->
-		  io:format("ErrorEvent ~p~n",[{ErrorEvent,?MODULE,?LINE}]),
-		  ErrorEvent
-	  end,
-    {reply, Reply, State};
-
-handle_call({stop_unload,ApplicationFileName}, _From, State) ->
-  %  io:format(" ~p~n",[{?FUNCTION_NAME,?MODULE,?LINE}]),
-    Result=try lib_controller:stop_unload(ApplicationFileName) of
-	       ok->
-		   ok;
-	       {error,Reason}->
-		   {error,Reason}
-	   catch
-	       Event:Reason:Stacktrace ->
-		   {Event,Reason,Stacktrace,?MODULE,?LINE}
-	   end,
-    Reply=case Result of
-	      ok->
-		  ok;
-	      ErrorEvent->
-		  io:format("ErrorEvent ~p~n",[{ErrorEvent,?MODULE,?LINE}]),
-		  ErrorEvent
-	  end,
-    {reply, Reply, State};
-
-handle_call({read_state}, _From, State) ->
-    Reply=State,
-    {reply, Reply, State};
 
 handle_call({ping}, _From, State) ->
     Reply=pong,
@@ -255,8 +164,8 @@ handle_call(UnMatchedSignal, From, State) ->
 %%--------------------------------------------------------------------
 
 
-handle_cast({reconciliate}, State) ->
-    spawn(fun()->lib_reconciliate:start() end),
+handle_cast({connect}, State) ->
+    spawn(fun()->lib_main:connect(?Sleep) end),
     {noreply, State};
 
 handle_cast({stop}, State) ->
@@ -286,12 +195,8 @@ handle_info({nodedown,Node}, State) ->
 
 
 handle_info(timeout, State) ->
-%    io:format("timeout State ~p~n",[{State,?MODULE,?LINE}]),
-  %  io:format("not implemented ~p~n",[{"lib_controller:connect_to_other_hosts()",?MODULE,?LINE}]),
-   %% lib_controller:connect_to_other_hosts(),
-
     ok=initial_trade_resources(),
-  %  spawn(fun()->lib_reconciliate:start() end),
+    spawn(fun()->lib_main:connect() end),
     
     {noreply, State};
 
