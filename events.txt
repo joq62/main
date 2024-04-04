@@ -1,0 +1,9 @@
+This is a description of the system events that shall be tracked
+
+Application Load_start or stop_unload
+Application crashed
+Node started  or crashed
+
+Git repo cloned or updated
+
+Report unexpected errors , timeout failed to start/stop 
