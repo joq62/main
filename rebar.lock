@@ -4,7 +4,7 @@
   0},
  {<<"controller_service">>,
   {git,"https://github.com/joq62/controller_service.git",
-       {ref,"2b0bbdee8fc9eeb08172ad5d14a14583093bd35c"}},
+       {ref,"4898ff61df0abdbf5ee76952076a8a51420e84a0"}},
   0},
  {<<"deployment_service">>,
   {git,"https://github.com/joq62/deployment_service.git",

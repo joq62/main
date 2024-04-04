@@ -31,7 +31,6 @@
 %%--------------------------------------------------------------------
 connect(Sleep)->
     Pong=[{N,net_adm:ping(N)}||N<-?ConnectNodes],
-    io:format("Pong  ~p~n",[{Pong,?MODULE,?LINE}]),
     timer:sleep(Sleep),
     rpc:cast(node(),main,connect,[]).
 
