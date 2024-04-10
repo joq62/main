@@ -1,4 +1,5 @@
--define(ConnectNodes,['main_a@c200','main_a@c201','main_a@c202']).
+%-define(ConnectNodes,['main_a@c200','main_a@c201','main_a@c202']).
+-define(ConnectModule,"main").
 -define(Sleep,20*1000).
 
 

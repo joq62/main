@@ -203,12 +203,13 @@ handle_info(timeout, State) ->
     ok=log:create_logger(NodeNodeLogDir,?LocalLogDir,?LogFile,?MaxNumFiles,?MaxNumBytes),
     {ok,_}=rd:start_link(),
     
-    Pong=[{N,net_adm:ping(N)}||N<-?ConnectNodes],
-    ?LOG_NOTICE("Connect result ",[Pong,?MODULE]),
- 
     {ok,_}=git_handler:start_link(),
+    {ok,_}=host:start_link(),
     {ok,_}=catalog:start_link(),
     {ok,_}=deployment:start_link(),
+    
+    ConnectResult=lib_main:connect_nodes(),
+    ?LOG_NOTICE("Connect result ",[ConnectResult,?MODULE]),
     {ok,_}=controller:start_link(),
     
     ok=initial_trade_resources(),
