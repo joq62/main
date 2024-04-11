@@ -1,5 +1,5 @@
 %% I provide following Resources 
--define(LocalResourceTuples,[{controller,{main,node()}}]).
+-define(LocalResourceTuples,[{main,{main,node()}}]).
 
 %% I want following resource types
 -define(TargetTypes,[]). 
