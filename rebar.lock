@@ -16,7 +16,7 @@
   0},
  {<<"host_service">>,
   {git,"https://github.com/joq62/host_service.git",
-       {ref,"9db316cd63f056dee3c14c279476182668dcbc5d"}},
+       {ref,"c340f8b4ddcf486b92a4abeb6c15e8f2d7b5f97b"}},
   0},
  {<<"log_service">>,
   {git,"https://github.com/joq62/log_service.git",
