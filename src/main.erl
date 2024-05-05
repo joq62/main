@@ -203,6 +203,7 @@ handle_info(timeout, State) ->
     ok=log:create_logger(NodeNodeLogDir,?LocalLogDir,?LogFile,?MaxNumFiles,?MaxNumBytes),
     {ok,_}=rd:start_link(),
     
+    {ok,_}=log2:start_link(),
     {ok,_}=git_handler:start_link(),
     {ok,_}=host:start_link(),
     {ok,_}=catalog:start_link(),
