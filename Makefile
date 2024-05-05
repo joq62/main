@@ -7,7 +7,7 @@ all:
 	rm -rf log resource_discovery etcd;
 	rm -rf inventory;
 	rm -rf host_specs catalog application_dir deployment_specs catalog_specs;
-	rm -rf doc;
+	rm -rf doc Mnesia.*;
 	rm -rf test_ebin;
 	#INFO: Deleting tilde files and beams
 	rm -rf *~ */*~ */*/*~;
@@ -52,7 +52,7 @@ build:
 	rm -rf ebin;
 	rm -rf rebar.lock
 	#INFO: Deleting files and dirs created during execution/runtime 
-	rm -rf logs;
+	rm -rf logs Mnesia.*;
 	rm -rf *_a;
 	#INFO: Compile application
 	mkdir ebin;		
@@ -81,7 +81,7 @@ clean:
 	rm -rf ebin;
 	rm -rf rebar.lock
 	#INFO: Deleting files and dirs created during execution/runtime 
-	rm -rf logs;
+	rm -rf logs  Mnesia.*;
 	rm -rf *_a;
 	#INFO: clean ENDED SUCCESSFUL
 eunit: 
@@ -104,7 +104,7 @@ eunit:
 	rm -rf ebin;
 	rm -rf rebar.lock
 	#INFO: Deleting files and dirs created during execution/runtime 
-	rm -rf logs;
+	rm -rf logs Mnesia.*;
 	rm -rf *_a;
 	#INFO: Creating eunit test code using test_ebin dir;
 	mkdir test_ebin;
