@@ -20,7 +20,7 @@
   0},
  {<<"log2_service">>,
   {git,"https://github.com/joq62/log2_service.git",
-       {ref,"f2b39a1c9e00ac4b41a5b8d71a3e5cd007381ba2"}},
+       {ref,"3e101c22dbaf9ac68d86c041cbf50d61300c64c2"}},
   0},
  {<<"log_service">>,
   {git,"https://github.com/joq62/log_service.git",
